@@ -10,15 +10,9 @@ namespace Readify.Technical.WebAPI.Controllers
     public class TriangleTypeController:Controller
     {
 
-        //[HttpGet("{a}/{b}/{c}")]
-        
-        //public async Task<string> Get(int a, int b,  int c)
-        //{
-
-        //    return await validateResult(GetTriangleType(a,b,c));
-        //}
+       
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery]Int64 a, [FromQuery]Int64 b, [FromQuery] Int64 c)
+        public IActionResult Get([FromQuery]Int64 a, [FromQuery]Int64 b, [FromQuery] Int64 c)
         {
             if(!this.ModelState.IsValid)
             {
@@ -29,7 +23,7 @@ namespace Readify.Technical.WebAPI.Controllers
             try {
                  
             
-            return Ok(await validateResult(GetTriangleType(a, b, c)));
+            return Ok( validateResult(GetTriangleType(a, b, c)));
             } catch(Exception ex)
             {
                 return BadRequest();
@@ -37,7 +31,7 @@ namespace Readify.Technical.WebAPI.Controllers
             }
         }
 
-        private async Task<string> validateResult(Triangle triangle)
+        private string validateResult(Triangle triangle)
         {
             switch (triangle)
             {
