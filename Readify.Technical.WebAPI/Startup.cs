@@ -50,9 +50,9 @@ namespace Readify.Technical.WebAPI
             });
             Action<RequestProfilerModel> requestResponseHandler = requestProfilerModel =>
             {
-               
-                LogToFile(requestProfilerModel.Request + " : {" + requestProfilerModel.Response+"}");
-               
+
+                 LogToFile(requestProfilerModel.Request + ":{" + requestProfilerModel.RequestTime + "}  Response:" + requestProfilerModel.Response);
+
             };
             app.UseMiddleware<RequestResponseLoggingMiddleware>(requestResponseHandler);
             app.UseStaticFiles();
@@ -70,6 +70,7 @@ namespace Readify.Technical.WebAPI
                 }
 
             }
+           
             using (FileStream fs = new FileStream(path+@"\requestlog.txt",FileMode.Append))
             {
                 await fs.WriteAsync(encodedText, 0, encodedText.Length);

@@ -9,11 +9,14 @@ namespace Readify.Technical.WebAPI.Controllers
     {
         [HttpGet]
         
-        public async Task<ActionResult> Get([FromQuery]int  n)
+        public async Task<ActionResult> Get([FromQuery]long  n)
         {
             try
             {
-                return Ok( await GetFibonacciNumber(n));
+                
+                    return Ok(await GetFibonacciNumber(n));
+                
+
             }catch (Exception ex)
             {
                 System.Diagnostics.Debug.Print(ex.Message);
@@ -24,17 +27,18 @@ namespace Readify.Technical.WebAPI.Controllers
 
         private async Task<long> GetFibonacciNumber(long num)
         {
-            try { 
-            long a = 0;
-            long b = 1;
-          
-            for (long i = 0; i < num; i++)
-            {
-                long temp = a;
-                a = b;
-                b = temp + b;
-            }
-            return (a>0)? a : throw new Exception("negative number ß");
+            try {
+
+                bool isNegative = num < 0;
+
+                double phi = (1 + Math.Sqrt(5)) / 2;
+                long result = (long)Math.Round(Math.Pow(phi, Math.Abs(num))
+                                        / Math.Sqrt(5));
+                if (result < 0)
+                    throw new Exception("error");
+                return  isNegative ? result *-1 : result ;
+
+                
             } catch(Exception ex)
             {
                 throw ex;

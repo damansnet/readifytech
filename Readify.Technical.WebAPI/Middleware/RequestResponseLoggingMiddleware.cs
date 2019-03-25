@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.IO;
+using Newtonsoft.Json;
 
 namespace Readify.Technical.WebAPI.Middleware
 {
@@ -53,26 +54,31 @@ namespace Readify.Technical.WebAPI.Middleware
         {
             HttpRequest request = context.Request;
             HttpResponse response = context.Response;
+            var obj = new
+            {
+                Schema = request.Scheme,
+                Host = request.Host,
+                Path = request.Path,
+                QueryString = request.QueryString,
+                Status = response.StatusCode,
+                Response = ReadStreamInChunks(newResponseBody)
+            };
 
-            return $"Http Response Information: {Environment.NewLine}" +
-                    $"Schema:{request.Scheme} {Environment.NewLine}" +
-                    $"Host: {request.Host} {Environment.NewLine}" +
-                    $"Path: {request.Path} {Environment.NewLine}" +
-                    $"QueryString: {request.QueryString} {Environment.NewLine}" +
-                    $"StatusCode: {response.StatusCode} {Environment.NewLine}" +
-                    $"Response Body: {ReadStreamInChunks(newResponseBody)}";
+            return JsonConvert.SerializeObject(obj);
         }
 
         private async Task<string> FormatRequest(HttpContext context)
         {
             HttpRequest request = context.Request;
-
-            return $"Http Request Information: {Environment.NewLine}" +
-                        $"Schema:{request.Scheme} {Environment.NewLine}" +
-                        $"Host: {request.Host} {Environment.NewLine}" +
-                        $"Path: {request.Path} {Environment.NewLine}" +
-                        $"QueryString: {request.QueryString} {Environment.NewLine}" +
-                        $"Request Body: {await GetRequestBody(request)}";
+            var obj = new
+            {
+                Schema = request.Scheme,
+                Host = request.Host,
+                Path = request.Path,
+                QueryString = request.QueryString,
+                Response = await GetRequestBody(request)
+            };
+           return JsonConvert.SerializeObject(obj);
         }
 
         public async Task<string> GetRequestBody(HttpRequest request)

@@ -11,14 +11,14 @@ namespace Readify.Technical.WebAPI.Controllers
 
         [HttpGet]
         
-        public async Task<IActionResult> Get([FromQuery]string sentence)
+        public IActionResult Get([FromQuery]string sentence)
         {
             try { 
-            return Ok(await GetReverseWords(sentence));
+            return Ok(GetReverseWords(sentence));
             } catch(Exception ex) { return BadRequest(); }
         }
 
-        private async Task<string> GetReverseWords(string sentence)
+        private string GetReverseWords(string sentence)
         {
             if (sentence == null)
                 return string.Empty;
